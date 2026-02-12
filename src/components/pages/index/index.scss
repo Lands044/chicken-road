@@ -613,24 +613,22 @@ img {
 	width: 100%;
 	max-width: 160em;
 	margin: 0 auto;
-	padding: 16px;
-	border-radius: 20px;
-	border: 3px solid #555;
-	background-color: #424242;
+	// padding: 8px 16px;
+	// border-radius: 20px;
+	// border: 3px solid #555;
+	// background-color: #424242;
 	display: grid;
 	gap: 16px;
-	grid-template-columns: 3.29fr 5fr 4.41fr;
 
 	@media (max-width: 768px) {
 		gap: 12px;
 		padding: 12px;
-		grid-template-columns: 1fr;
 		font-size: 140%;
 	}
 
 	&__wrapper {
 		padding: 0 6em;
-		margin: 2em auto;
+		margin: 2em 0;
 
 		@media (max-width: 768px) {
 			padding: 0 16px;
@@ -902,13 +900,14 @@ img {
 	-webkit-tap-highlight-color: transparent;
 	background-color: #3ec55b;
 	padding: 10px;
-	min-height: 50px;
+	min-height: 60PX;
 	min-width: 50px;
 	border-radius: 20px;
 	transition: background-color 0.1s ease-in-out;
 
 	@media (max-width: 768px) {
 		border-radius: 9px;
+		min-height: 50PX;
 	}
 
 	@media (min-width: 991px) {
@@ -982,6 +981,19 @@ img {
 // ============================================
 // Popup (Win)
 // ============================================
+$gold: #fffd2f;
+$green: rgba(62, 197, 91, 0.9);
+
+// Base width for vw calculations (design width)
+$base-width: 1440;
+
+// Function to convert px to vw (proportional scaling only for screens > 1440px)
+// On screens <= 1440px returns fixed px value
+// On screens > 1440px scales proportionally
+@function vw($px) {
+	@return max(#{$px}px, calc(#{$px} / #{$base-width} * 100vw));
+}
+
 .popup {
 	position: fixed;
 	top: 0;
@@ -1005,6 +1017,10 @@ img {
 			scale: 1;
 			opacity: 1;
 		}
+
+		.confetti-canvas {
+			opacity: 1;
+		}
 	}
 
 	&__overlay {
@@ -1014,9 +1030,13 @@ img {
 		width: 100%;
 		height: 100%;
 		background: rgba(0, 0, 0, 0.65);
-		backdrop-filter: blur(10px);
+		backdrop-filter: blur(10PX);
 		opacity: 0;
 		transition: opacity 0.5s ease;
+
+		@media (max-width:toEm($mobile)) {
+			backdrop-filter: blur(10PX);
+		}
 	}
 
 	&__content {
@@ -1028,95 +1048,100 @@ img {
 		opacity: 0;
 		transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 		z-index: 100;
-		
-		@media (max-width:toEm($mobile)){
-			max-width: 56rem;
-			width: 100%;
+
+		@media (max-width:toEm($mobile)) {
+			scale: 1;
 		}
 	}
 
 	&__inner {
-		background: rgba(62, 197, 91, 0.9);
-		border: 5px solid #3ec55b;
-		border-radius: 30px;
-		padding: 50px 60px;
+		background-color: $green;
+		border: 4PX solid $gold;
+		border-radius: 30PX;
+		padding: 50PX 60PX;
 		text-align: center;
-		box-shadow: 0 20px 60px rgba(62, 197, 91, 0.3),
-					0 0 40px rgba(62, 197, 91, 0.4),
-					inset 0 2px 20px rgba(255, 255, 255, 0.1);
-		backdrop-filter: blur(35px);
+		box-shadow: 0 20PX 60PX rgba(255, 215, 0, 0.3),
+			0 0 40PX rgba(255, 107, 157, 0.4),
+			inset 0 2PX 20PX rgba(255, 255, 255, 0.1);
+		position: relative;
+		overflow: hidden;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		white-space: nowrap;
-		gap: 20px;
 
-		@media (max-width: 768px) {
-			padding: 40px 30px;
-			border-radius: 20px;
-			border-width: 3px;
+		@media (max-width:toEm($mobile)) {
+			padding: 40PX 30PX;
+			border-radius: 20PX;
+			border-width: 3PX;
 		}
 	}
 
 	&__title {
-		font-size: 9rem;
+		font-size: 48PX;
 		font-weight: 700;
-		color: #fff;
-		text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
-					 0 4px 8px rgba(0, 0, 0, 0.5);
-		margin-bottom: 20px;
+		color: $gold;
+		text-shadow: 0 0 20PX rgba(255, 215, 0, 0.5),
+			0 4PX 8PX rgba(0, 0, 0, 0.5);
+		margin-bottom: 20PX;
 		text-transform: uppercase;
-		letter-spacing: 2px;
+		letter-spacing: 2PX;
+		animation: titleGlow 2s ease-in-out infinite;
 
-		@media (max-width: 768px) {
-			margin-bottom: 15px;
+		@media (max-width:toEm($mobile)) {
+			font-size: 24PX;
+			margin-bottom: 15PX;
+			letter-spacing: 2PX;
 		}
 	}
 
 	&__text {
-		font-size: 4rem;
+		font-size: 24PX;
 		font-weight: 600;
-		color: #fffd2f;
-		margin-bottom: 40px;
-		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+		color: #fff;
+		margin-bottom: 40PX;
+		text-shadow: 0 2PX 4PX rgba(0, 0, 0, 0.5);
 
-		@media (max-width: 768px) {
-			margin-bottom: 30px;
+		@media (max-width:toEm($mobile)) {
+			font-size: 16PX;
+			margin-bottom: 30PX;
 		}
 	}
 }
 
 .cta-button {
-	display: inline-block;
-	background-color: #3ec55b;
+	background-color: $green;
 	color: #fff;
-	padding: 15px 40px;
-	font-size: 5rem;
+	padding: 15PX 25PX;
+	font-size: 22PX;
 	font-weight: 700;
-	border-radius: 12px;
-	border: 2px solid #fff;
+	border-radius: 12PX;
+	border: 2PX solid #fff;
 	text-align: center;
-	text-decoration: none;
 	animation: ctaPulse 1.5s ease-in-out infinite;
 
-	@media (max-width: 768px) {
-		padding: 15px 25px;
+	@media (max-width:toEm($mobile)) {
+		padding: 15PX 25PX;
+		font-size: 22PX;
+		border-radius: 12PX;
+		border-width: 2PX;
 	}
 }
 
 @keyframes ctaPulse {
 	0% {
 		transform: scale(1);
-		box-shadow: 0 0 0 0 rgba(62, 197, 91, 0.7);
+		box-shadow: 0 0 0 0 rgba($green, 0.7);
 	}
+
 	50% {
 		transform: scale(1.05);
-		box-shadow: 0 0 20px 10px rgba(62, 197, 91, 0.3);
+		box-shadow: 0 0 20PX 10PX rgba($green, 0.3);
 	}
+
 	100% {
 		transform: scale(1);
-		box-shadow: 0 0 0 0 rgba(62, 197, 91, 0);
+		box-shadow: 0 0 0 0 rgba($green, 0);
 	}
 }
 
