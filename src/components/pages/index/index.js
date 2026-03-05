@@ -333,8 +333,21 @@ function setupRedirectHandler() {
 	});
 }
 
+// Fix rotate-overlay height for in-app browsers (Instagram, TikTok etc.)
+function fixRotateOverlay() {
+	const overlay = document.querySelector('.rotate-overlay');
+	if (overlay) {
+		overlay.style.height = window.innerHeight + 'px';
+	}
+}
+window.addEventListener('resize', fixRotateOverlay);
+window.addEventListener('orientationchange', () => {
+	setTimeout(fixRotateOverlay, 100);
+});
+
 // Initialize game when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
+	fixRotateOverlay();
 	new ChickenRoadGame().initGame();
 	setupRedirectHandler();
 });
