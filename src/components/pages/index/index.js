@@ -342,7 +342,7 @@ function fixRotateOverlay() {
 	const h = vv ? vv.height : window.innerHeight;
 	const w = vv ? vv.width : window.innerWidth;
 
-	overlay.style.height = h + 'px';
+	overlay.style.height = (h + 200) + 'px';
 	overlay.style.width = w + 'px';
 	overlay.style.top = (vv ? vv.offsetTop : 0) + 'px';
 	overlay.style.left = (vv ? vv.offsetLeft : 0) + 'px';
