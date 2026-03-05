@@ -336,13 +336,26 @@ function setupRedirectHandler() {
 // Fix rotate-overlay height for in-app browsers (Instagram, TikTok etc.)
 function fixRotateOverlay() {
 	const overlay = document.querySelector('.rotate-overlay');
-	if (overlay) {
-		overlay.style.height = window.innerHeight + 'px';
-	}
+	if (!overlay) return;
+
+	const vv = window.visualViewport;
+	const h = vv ? vv.height : window.innerHeight;
+	const w = vv ? vv.width : window.innerWidth;
+
+	overlay.style.height = h + 'px';
+	overlay.style.width = w + 'px';
+	overlay.style.top = (vv ? vv.offsetTop : 0) + 'px';
+	overlay.style.left = (vv ? vv.offsetLeft : 0) + 'px';
 }
-window.addEventListener('resize', fixRotateOverlay);
+
+if (window.visualViewport) {
+	window.visualViewport.addEventListener('resize', fixRotateOverlay);
+	window.visualViewport.addEventListener('scroll', fixRotateOverlay);
+} else {
+	window.addEventListener('resize', fixRotateOverlay);
+}
 window.addEventListener('orientationchange', () => {
-	setTimeout(fixRotateOverlay, 100);
+	setTimeout(fixRotateOverlay, 150);
 });
 
 // Initialize game when DOM is ready
