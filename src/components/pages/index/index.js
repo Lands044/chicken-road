@@ -358,6 +358,22 @@ window.addEventListener('orientationchange', () => {
 	setTimeout(fixRotateOverlay, 150);
 });
 
+// Disable pinch-to-zoom and double-tap zoom on iOS Chrome and other browsers
+document.addEventListener('touchstart', (e) => {
+	if (e.touches.length > 1) e.preventDefault();
+}, { passive: false });
+
+document.addEventListener('gesturestart', (e) => {
+	e.preventDefault();
+}, { passive: false });
+
+let lastTouchEnd = 0;
+document.addEventListener('touchend', (e) => {
+	const now = Date.now();
+	if (now - lastTouchEnd < 300) e.preventDefault();
+	lastTouchEnd = now;
+}, { passive: false });
+
 // Initialize game when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
 	fixRotateOverlay();
